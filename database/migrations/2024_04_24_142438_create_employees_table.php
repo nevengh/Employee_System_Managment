@@ -16,7 +16,9 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email');
+            $table->foreignId('department_id')->constrained();
             $table->string('position')->default('Employee');
+            $table->softDeletes();
 
             $table->timestamps();
         });

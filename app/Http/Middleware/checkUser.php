@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class checkUser
@@ -15,8 +16,11 @@ class checkUser
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(auth()->user()->status==0){
-            return response('ok');
+        // if(auth()->user()->status==0){
+        //     return response('error');
+        // }
+        if (!Auth::check()) {
+            return response('not login user');
         }
         return $next($request);
     }

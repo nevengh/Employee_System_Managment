@@ -3,8 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeController;
-use App\Models\Department;
-use Illuminate\Http\Request;
+use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,4 +29,5 @@ Route::controller(AuthController::class)->group(function () {
 // Route::apiResource('department',Department::class)->middleware('checkUser');
 
 Route::apiResource('department',DepartmentController::class)->middleware('checkUser');
-Route::apiResource('employee',EmployeeController::class);
+Route::apiResource('employee',EmployeeController::class)->middleware('checkUser');
+Route::apiResource('project',ProjectController::class)->middleware('checkUser');

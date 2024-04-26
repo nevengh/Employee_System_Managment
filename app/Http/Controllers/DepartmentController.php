@@ -13,9 +13,14 @@ class DepartmentController extends Controller
     public function index()
     {
         $department=Department::all();
+
+        $department=Department::with('employees')->get();
+        // return trashed data
+        $trashData=Department::onlyTrashed()->get();
         return response()->json([
                 'status'=>'success',
-                'deprtment'=>$department
+                'deprtment'=>$department,
+                'trashedData'=>$trashData
         ]);
     }
 

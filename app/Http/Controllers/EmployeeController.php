@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use App\Models\Project;
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
@@ -13,10 +14,14 @@ class EmployeeController extends Controller
     public function index()
     {
         $employee=Employee::all();
+        $employee=Employee::with('projects')->get();
+        $trashData=Employee::onlyTrashed()->get();
         return response()->json([
                 'status'=>'success',
-                'employee'=>$employee
+                'employee'=>$employee,
+                'trashedData'=>$trashData
         ]);
+
     }
 
     /**
@@ -24,6 +29,8 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
+
+
         $request->validate([
             'first_name'=>'required|string|max:255',
             'last_name'=>'required|string|max:255',
@@ -36,6 +43,10 @@ class EmployeeController extends Controller
             'email'=>$request->email,
             'position'=>$request->position,
         ]);
+        // $employee=Employee::create();
+        $employee->departments()->attach($request->department_id);
+        $employee->projects()->attach($request->project_id);
+
         return response()->json([
             'status'=>'success',
             'employee'=>$employee
@@ -56,20 +67,10 @@ class EmployeeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Employee $employee)
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'first_name'=>'nullable|string|max:255',
-            'last_name'=>'nullable|string|max:255',
-            'email'=>'nullable|string|max:255',
-            'position'=>'nullable|string|max:255',
-        ]);
-        $employee->update([
-            'first_name'=>$request->first_name,
-            'last_name'=>$request->last_name,
-            'email'=>$request->email,
-            'position'=>$request->position,
-        ]);
+        $employee = Employee::findOrFail($id);
+        $employee->update($request->all());
         return response()->json([
             'status' => 'success',
             'employee' => $employee
@@ -82,6 +83,7 @@ class EmployeeController extends Controller
     public function destroy(Employee $employee)
     {
         $employee -> delete();
+        $employee->projects()->detach();
         return response()->json([
             'status' => 'delete success'
         ]);
