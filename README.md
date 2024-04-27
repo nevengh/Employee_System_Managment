@@ -1,4 +1,4 @@
-Employee Management System (EMS)
+#Employee Management System (EMS)
 This is a basic Employee Management System (EMS) built using Laravel 10. The system allows for managing departments and employees within those departments, with features like user authentication, CRUD operations, relationships between departments and employees, soft deletion of records, and an API to interact with the system.
 
 Features
