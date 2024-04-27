@@ -36,15 +36,16 @@ class EmployeeController extends Controller
             'last_name'=>'required|string|max:255',
             'email'=>'required|string|max:255',
             'position'=>'nullable|string|max:255',
+            'department_id' => 'required|exists:departments,id',
+
         ]);
         $employee=Employee::create([
             'first_name'=>$request->first_name,
             'last_name'=>$request->last_name,
             'email'=>$request->email,
             'position'=>$request->position,
+            'department_id'=>$request->department_id,
         ]);
-        // $employee=Employee::create();
-        $employee->departments()->attach($request->department_id);
         $employee->projects()->attach($request->project_id);
 
         return response()->json([
@@ -67,10 +68,22 @@ class EmployeeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Employee $employee)
     {
-        $employee = Employee::findOrFail($id);
-        $employee->update($request->all());
+        $request->validate([
+            'first_name'=>'nullable|string|max:255',
+            'last_name'=>'nullable|string|max:255',
+            'email'=>'nullable|string|max:255',
+            'position'=>'nullable|string|max:255',
+            'department_id' => 'nullable|exists:departments,id',
+        ]);
+        $employee->update([
+            'first_name'=>$request->first_name,
+            'last_name'=>$request->last_name,
+            'email'=>$request->email,
+            'position'=>$request->position,
+            'department_id'=>$request->department_id,
+        ]);
         return response()->json([
             'status' => 'success',
             'employee' => $employee

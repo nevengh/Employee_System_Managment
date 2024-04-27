@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,3 +32,4 @@ Route::controller(AuthController::class)->group(function () {
 Route::apiResource('department',DepartmentController::class)->middleware('checkUser');
 Route::apiResource('employee',EmployeeController::class)->middleware('checkUser');
 Route::apiResource('project',ProjectController::class)->middleware('checkUser');
+Route::apiResource('note',NoteController::class)->middleware('checkUser');
